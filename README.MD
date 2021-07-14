@@ -78,7 +78,8 @@ npm run build
 ```
 
 # Execution Instructions
-This application parses `.txt` files and returns an output. Once you have built the code as specified in the section above, you can simply use the following command to parse a `.txt` file:
+## In the Terminal / Bash
+This application parses `.txt` files and returns an output. Once you have built the code as specified in the section above, you can simply use the following command to parse `.txt` files as input:
 
 ```sh
 node dist data.txt
@@ -92,3 +93,99 @@ node dist ../data.txt
 # To parse .txt files in child folders
 node dist ./my-data/data.txt
 ```
+
+## In in the input (`.txt`) files
+The input files must follow a fixed format. The first row of each `.txt` file must contain 1 number for the total number of `car` lots, and 1 number for the total number of `motorcycle` lots, in that order:
+
+```sh
+# 3 car lots, and 4 motorcycle lots
+3 4
+
+# 1 car lot, and 2 motorcycle lots
+1 2 
+```
+For each subsequent line, there are two possible types of events:
+1. Vehicle entering the carpark
+2. Vehicle exiting carpark
+
+For vehicles entering the carpark, the command must be given in the following format show below. There are only two types of `vehicleTypes` accepted - `car` and `motorcycle`: 
+```sh
+# Enter <vehicleType> <licensePlate> <timestamp>
+Enter car SGA1234D 1613541902
+
+# Enter <vehicleType> <licensePlate> <timestamp>
+Enter motorcycle SGX5311K 1613541902
+```
+
+For vehicles exiting the carpark, the command must be given in the following format:
+```sh
+# Exit <licensePlate> <timestamp>
+Exit SGX5311K 1613541910
+```
+A complete input file might look like this:
+```sh
+3 4
+Enter motorcycle SGX1234A 1613541902
+Enter car SGF9283P 1613541902
+Exit SGX1234A 1613545602
+Enter car SGP2937F 1613546029
+Enter car SDW2111W 1613549730
+Enter car SSD9281L 1613549740
+Exit SDW2111W 1613559745
+```
+
+## Input Validation
+Validation errors might occur if the inputs contain erroneous information. Some examples of validation errors include:
+
+- Not including both the car and motorcycle lot counts
+- Choosing a negative number for the vehicle lot count(s)
+- Choosing an invalid input for the vehicle lot count(s) such as letters
+- Not providing the accepted `Enter` or `Exit` commands
+- Not providing the accepted `car` or `motorcycle` vehicle types
+- Not providing a valid timestamp
+- Having an invalid number of spaces (more than 1) between each data attribute
+
+# Interpreting the Output
+The program will print to your `terminal` or `bash` the output. 
+
+When an `enter` command is accepted, the program will print the acceptance result and append the lot that the vehicle was assigned to:
+
+```sh
+# For cars
+Accept CarLot1
+
+# For motorcycles
+Accept MotorcycleLot3
+```
+
+When an `exit` command is accepted, the program will print the parking lot that was freed up and append the parking fee charged. The parking rates are $1/hour for a motorcycle and $2/hour for a car. All fees are rounded up to the nearest hour. 
+
+```sh
+# Car lot 3 was freed up with a charge of $6
+CarLot3 6
+
+# Motorcycle Lot 2 was freed up with a charge of $2
+MotorcycleLot2 2
+```
+
+When the command is erroneous and cannot be executed, a rejection message is printed. This can happen in several scenarios, here are some examples:
+
+- When the lots for that vehicle category are all taken and a vehicle is to be parked in that same category
+- When a vehicle is to exit but it is not currently parked
+
+The rejection message looks like this:
+
+```sh
+Reject
+```
+Given the example in the previous section, a sample output might look like:
+```sh
+Accept MotorcycleLot1
+Accept CarLot1
+MotorcycleLot1 2
+Accept CarLot2
+Accept CarLot3
+Reject
+CarLot3 6
+```
+Each command is processed and printed in increasing / ascending order of the `timestamp` provided, so that it is chronologically understandable.
