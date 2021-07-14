@@ -112,9 +112,9 @@ describe('Parker', () => {
                 );
             });
 
-            it('should display incorrect timestamp commands as rejects', async () => {
-                await textExecution('output/mixed-output-invalid-timestamps.txt');
-                expect(parker.getLogs()).toEqual('Accept MotorcycleLot1\nReject');
+            it('should handle commands by the timestamp order ascending', async () => {
+                await textExecution('output/mixed-output-timestamps-sorting.txt');
+                expect(parker.getLogs()).toEqual('Accept MotorcycleLot1\nReject\nMotorcycleLot1 1');
             });
         });
     });

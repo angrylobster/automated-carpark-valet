@@ -39,22 +39,24 @@ export class ParkerParser {
     }
 
     private parseAndValidateCommandRows(rowData: string[]): ParkingCommand[] {
-        return rowData.map((row: string, index: number) => {
-            const [type, ...commandData] = row.split(ParserSeparator.Column);
-            const command = {} as ParkingCommand;
-            command.type = this.validateAndTransformCommandType(type, index);
-            if (command.type === CommandType.ENTER) {
-                const [vehicleType, vehicleId, timestamp] = commandData;
-                command.vehicleType = this.validateAndTransformVehicleType(vehicleType, index);
+        return rowData
+            .map((row: string, index: number) => {
+                const [type, ...commandData] = row.split(ParserSeparator.Column);
+                const command = {} as ParkingCommand;
+                command.type = this.validateAndTransformCommandType(type, index);
+                if (command.type === CommandType.ENTER) {
+                    const [vehicleType, vehicleId, timestamp] = commandData;
+                    command.vehicleType = this.validateAndTransformVehicleType(vehicleType, index);
+                    command.vehicleId = vehicleId;
+                    command.timestamp = this.validateAndTransformTimestamp(timestamp, index);
+                    return command;
+                }
+                const [vehicleId, timestamp] = commandData;
                 command.vehicleId = vehicleId;
                 command.timestamp = this.validateAndTransformTimestamp(timestamp, index);
                 return command;
-            }
-            const [vehicleId, timestamp] = commandData;
-            command.vehicleId = vehicleId;
-            command.timestamp = this.validateAndTransformTimestamp(timestamp, index);
-            return command;
-        });
+            })
+            .sort((firstCommand, nextCommand) => firstCommand.timestamp - nextCommand.timestamp);
     }
 
     private validateAndTransformVehicleType(vehicleType: string, index: number): VehicleType {

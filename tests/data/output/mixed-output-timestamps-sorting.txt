@@ -1,0 +1,4 @@
+0 1
+Enter motorcycle SVK9821X 1
+Exit SVK9821X 3
+Enter motorcycle SJU8671A 2
