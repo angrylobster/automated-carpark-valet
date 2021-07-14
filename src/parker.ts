@@ -68,7 +68,7 @@ export class Parker {
         this.logs.push(`${logPrefix}${vehicleTypeString}Lot${index + 1}${parkingChargeSuffix}`);
     }
 
-    printLogs(): string {
+    getLogs(): string {
         return this.logs.join(ParserSeparator.Row);
     }
 

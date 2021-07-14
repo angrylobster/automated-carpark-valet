@@ -30,7 +30,7 @@ describe('Parker', () => {
             });
 
             it('should be able to log the motorcycle being accepted', () => {
-                expect(parker.printLogs()).toEqual('Accept MotorcycleLot1');
+                expect(parker.getLogs()).toEqual('Accept MotorcycleLot1');
             });
         });
 
@@ -40,7 +40,7 @@ describe('Parker', () => {
             });
 
             it('should be able to log the car being accepted', () => {
-                expect(parker.printLogs()).toEqual('Accept CarLot1');
+                expect(parker.getLogs()).toEqual('Accept CarLot1');
             });
         });
 
@@ -50,7 +50,7 @@ describe('Parker', () => {
             });
 
             it('should be able to log both the car and motorcycle being accepted', () => {
-                expect(parker.printLogs()).toEqual('Accept MotorcycleLot1\nAccept CarLot1');
+                expect(parker.getLogs()).toEqual('Accept MotorcycleLot1\nAccept CarLot1');
             });
         });
 
@@ -60,7 +60,7 @@ describe('Parker', () => {
             });
 
             it('should be able to log both the car and motorcycle being accepted', () => {
-                expect(parker.printLogs()).toEqual('Accept MotorcycleLot1\nAccept CarLot1\nAccept MotorcycleLot2');
+                expect(parker.getLogs()).toEqual('Accept MotorcycleLot1\nAccept CarLot1\nAccept MotorcycleLot2');
             });
         });
 
@@ -70,7 +70,7 @@ describe('Parker', () => {
             });
 
             it('should be able to log the car entry and exit price', () => {
-                expect(parker.printLogs()).toEqual('Accept CarLot1\nCarLot1 4');
+                expect(parker.getLogs()).toEqual('Accept CarLot1\nCarLot1 4');
             });
         });
 
@@ -80,26 +80,26 @@ describe('Parker', () => {
             });
 
             it('should be able to log a rejection', () => {
-                expect(parker.printLogs()).toEqual('Reject');
+                expect(parker.getLogs()).toEqual('Reject');
             });
         });
 
         describe('when accepting more cars or motorcycles than lots', () => {
             it('should reject the excess cars', async () => {
                 await textExecution('output/reject-no-lots-cars.txt');
-                expect(parker.printLogs()).toEqual('Accept CarLot1\nReject');
+                expect(parker.getLogs()).toEqual('Accept CarLot1\nReject');
             });
 
             it('should reject the excess motorcycles', async () => {
                 await textExecution('output/reject-no-lots-motorcycles.txt');
-                expect(parker.printLogs()).toEqual('Accept MotorcycleLot1\nReject');
+                expect(parker.getLogs()).toEqual('Accept MotorcycleLot1\nReject');
             });
         });
 
         describe('when handling files that will generate mixed outputs', () => {
             it('should handle all outputs correctly', async () => {
                 await textExecution('output/mixed-output-one.txt');
-                expect(parker.printLogs()).toEqual(
+                expect(parker.getLogs()).toEqual(
                     [
                         'Accept MotorcycleLot1',
                         'Accept CarLot1',
@@ -114,7 +114,7 @@ describe('Parker', () => {
 
             it('should display incorrect timestamp commands as rejects', async () => {
                 await textExecution('output/mixed-output-invalid-timestamps.txt');
-                expect(parker.printLogs()).toEqual('Accept MotorcycleLot1\nReject');
+                expect(parker.getLogs()).toEqual('Accept MotorcycleLot1\nReject');
             });
         });
     });
